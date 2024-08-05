@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.i2it.ems.exception.DataBaseException;
 import com.i2it.ems.model.Project;
 import com.i2it.ems.project.service.ProjectService;
@@ -18,6 +21,7 @@ import com.i2it.ems.util.Validator;
 public class ProjectController {
     
     private ProjectService projectService = new ProjectServiceImpl();
+    private static final Logger logger = LogManager.getLogger(DepartmentController.class);
     private Scanner scanner = new Scanner(System.in);   
 
     /**
@@ -29,8 +33,11 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void createProject() throws DataBaseException {
+        logger.debug("Entering createProject");
         String name = getName();
         projectService.createProject(new Project(name));
+        logger.info("project created with name = " + name);
+        logger.debug("Exiting createProject");
     }
     
     /**
