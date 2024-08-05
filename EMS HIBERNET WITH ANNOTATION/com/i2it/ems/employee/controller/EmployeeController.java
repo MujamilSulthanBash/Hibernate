@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.i2it.ems.department.controller.DepartmentController;
 import com.i2it.ems.employee.service.EmployeeService;
 import com.i2it.ems.employee.service.EmployeeServiceImpl;
@@ -28,6 +31,7 @@ public class EmployeeController {
     private EmployeeService employeeService = new EmployeeServiceImpl();
     private DepartmentController departmentController = new DepartmentController();
     private ProjectController projectController = new ProjectController();
+    private static final Logger logger = LogManager.getLogger(EmployeeController.class);
     private Scanner scanner = new Scanner(System.in);   
 
     /**
@@ -44,7 +48,7 @@ public class EmployeeController {
         LocalDate dob = getDob();
         Employee employee = new Employee(name , dob, address);
         employeeService.createEmployee(employee);
-        System.out.println("Employee created ");
+        logger.info("Employee added with name = " + name);
     }
     
     /**
