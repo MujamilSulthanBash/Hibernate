@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.i2it.ems.exception.DataBaseException;
 import com.i2it.ems.department.service.DepartmentService;
 import com.i2it.ems.department.service.DepartmentServiceImpl;
@@ -18,6 +21,7 @@ import com.i2it.ems.util.Validator;
 public class DepartmentController {
     
     private DepartmentService departmentService = new DepartmentServiceImpl();
+    private static final Logger logger = LogManager.getLogger(DepartmentController.class);
     private Scanner scanner = new Scanner(System.in);   
 
     /**
@@ -29,8 +33,11 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void createDepartment() throws DataBaseException {
+        logger.debug("Entering createDepartment");
         String name = getName();
         departmentService.createDepartment(new Department(name));
+        logger.info("Department created with name = " + name);
+        logger.debug("Exiting createDepartment");
     }
     
     /**
@@ -42,6 +49,7 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void displayDepartments() throws DataBaseException {
+        logger.debug("Entering displayDepartments");
         List<Department> departments = departmentService.retrieveDepartments();
         if (departments != null) {
             System.out.println("-------------------");
@@ -52,9 +60,11 @@ public class DepartmentController {
                                   department.getName()); 
             }
             System.out.println("-------------------");
+            logger.info("Displayed Departments");
         } else {
-            System.out.println("No departments ");
+            logger.error("No departments ");
         }
+        logger.debug("Exiting displayDepartments");
     }
     
     /**
@@ -66,6 +76,7 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void displayDepartmentById() throws DataBaseException {
+        logger.debug("Entering displayDepartmentById");
         System.out.println("Enter the Employee id");
         int id = getId();
         Department department = departmentService.retrieveDepartmentById(id);
@@ -76,9 +87,11 @@ public class DepartmentController {
             System.out.format(format, department.getId(), 
                               department.getName());
             System.out.println("-------------------");
+            logger.info("Displayed Department by id " + department.getId());
         } else {
-            System.out.println("No such department id : " +id);
+            logger.error("No such department id : " +id);
         }
+        logger.debug("Exiting displayDepartmentById");
     }
 
     /**
@@ -90,15 +103,18 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void updateDepartment() throws DataBaseException {
+        logger.debug("Entering updateDepartment");
         System.out.println("Enter the Department Id to update");
         int id = getId();
         Department department = departmentService.retrieveDepartmentById(id);
         if (department != null) {
             Department updatedDepartment = updateOperation(department);
             departmentService.updateDepartment(updatedDepartment); 
+            logger.info("updated Department " + department.getName());
         } else {
-            System.out.println("No such department id : " +id);
+            logger.error("No such department id : " +id);
         }
+        logger.debug("Exiting updateDepartment");
     }
 
     /**
@@ -112,13 +128,16 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void deleteDepartment(int id) throws DataBaseException {
+        logger.debug("Entering deleteDepartment");
         Department department = departmentService.retrieveDepartmentById(id);
         if (department != null) {
             department.setIsActive(false);
             departmentService.deleteDepartment(department);
+            logger.info("deleted Department " + department.getName());
         } else {
-            System.out.println("No such department id : " +id);
-        }    
+            logger.error("No such department id : " +id);
+        } 
+        logger.debug("Exiting deleteDepartment");   
     }
 
     /**
@@ -132,6 +151,7 @@ public class DepartmentController {
      *     - When Exception occurs
      */
     public void displayOperation() throws DataBaseException, NumberFormatException {
+        logger.debug("Entering displayOperation");
         boolean repeatList = true;
         while (repeatList) {
             System.out.println("Select the choice [1-3]");
@@ -151,10 +171,11 @@ public class DepartmentController {
                         repeatList = false;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Please Enter Number between [1-3]");
+                logger.error("Please Enter Number between [1-3]");
                 throw new NumberFormatException("issue while display the list choice ");
             }
         }
+        logger.debug("Exiting displayOperation");
     }
 
     /**
@@ -174,6 +195,7 @@ public class DepartmentController {
      */
     public Department updateOperation(Department department) throws DataBaseException, 
                                       NumberFormatException {
+        logger.debug("Entering updateOperation");
         boolean repeat = true;
         while (repeat) {
             System.out.println("1 ==> Update Department Name");
@@ -188,11 +210,12 @@ public class DepartmentController {
                     default: System.out.println("Enter valid option");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Enter valid option");
+                logger.error("Enter valid option");
                 throw new NumberFormatException("issue while display the list choice ");
             }
             repeat = false;
         }
+        logger.debug("Exiting updateOperation");
         return department;
     }
 
@@ -233,7 +256,7 @@ public class DepartmentController {
                 id = Integer.parseInt(scanner.nextLine());
                 repeat = false;
             } catch (NumberFormatException e) {
-                System.out.println("Please Enter Number");
+                logger.error("Please Enter Number");
                 repeat = false;
             }
         } while (repeat);
@@ -247,6 +270,7 @@ public class DepartmentController {
      * </p>
      */
     public void displayChoice() {
+        logger.debug("Entering displayChoice");
         boolean repeat = true;
         while (repeat) {
             System.out.println("Select the choice [1-5]");
@@ -277,13 +301,14 @@ public class DepartmentController {
                     default: System.out.println("Enter valid number");
                 }
             } catch (DataBaseException e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             }
         }
+        logger.debug("Exiting displayChoice");
     }
 
 }
