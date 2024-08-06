@@ -215,8 +215,8 @@ public class DepartmentController {
             }
             repeat = false;
         }
+        logger.debug("Exiting updateOperation");
         return department;
-       logger.debug("Exiting updateOperation");
     }
 
     /**

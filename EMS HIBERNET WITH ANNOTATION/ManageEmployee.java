@@ -21,6 +21,11 @@ public class ManageEmployee {
         manageEmployee.displayChoice();
     }
 
+    /**
+     * <p>
+     * This is responsible for manage the employee related data based on user choice.
+     * </p>
+     */
     public void displayChoice() {
         boolean repeat = true;
         while (repeat) {

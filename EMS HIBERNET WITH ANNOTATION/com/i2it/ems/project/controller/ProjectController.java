@@ -21,7 +21,7 @@ import com.i2it.ems.util.Validator;
 public class ProjectController {
     
     private ProjectService projectService = new ProjectServiceImpl();
-    private static final Logger logger = LogManager.getLogger(DepartmentController.class);
+    private static final Logger logger = LogManager.getLogger(ProjectController.class);
     private Scanner scanner = new Scanner(System.in);   
 
     /**
@@ -49,6 +49,7 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void displayProjects() throws DataBaseException {
+        logger.debug("Entering displayProjects");
         List<Project> projects = projectService.retrieveProjects();
         if (projects != null) {
             System.out.println("-------------------");
@@ -59,9 +60,11 @@ public class ProjectController {
                                   project.getName()); 
             }
             System.out.println("-------------------");
+            logger.info("Displayed all projects");
         } else {
-            System.out.println("No projects");
+            logger.error("No projects");
         }
+        logger.debug("Exiting displayProjects");
     }
     
     /**
@@ -73,6 +76,7 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void displayProjectById() throws DataBaseException {
+        logger.debug("Entering displayProjectById");
         System.out.println("Enter the Project id");
         int id = getId();
         Project project = projectService.retrieveProjectById(id);
@@ -83,9 +87,11 @@ public class ProjectController {
             System.out.format(format, project.getId(), 
                               project.getName());
             System.out.println("-------------------");
+            logger.info("Display project by id = " + id);
         } else { 
-            System.out.println("No such project id : " +id);
+            logger.error("No such project id : " +id);
         }
+        logger.debug("Exiting displayProjectById");
     }
 
     /**
@@ -97,15 +103,18 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void updateProject() throws DataBaseException {
+        logger.debug("Entering updateProject");
         System.out.println("Enter the Project Id to update");
         int id = getId();
         Project project = projectService.retrieveProjectById(id);
         if (project != null) {
             Project updatedProject = updateOperation(project);
             projectService.updateProject(updatedProject); 
+            logger.info("project updated with id = " + id);
         } else {
-            System.out.println("No such project id : " +id);
+            logger.error("No such project id : " +id);
         }
+        logger.debug("Exiting updateProject");
     }
 
     /**
@@ -119,13 +128,16 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void deleteProject(int id) throws DataBaseException {
+        logger.debug("Entering deleteProject");
         Project project = projectService.retrieveProjectById(id);
         if (project != null) {
             project.setIsActive(false);
             projectService.deleteProject(project);
+            logger.info("project deletd with id = " + id);
         } else {
-            System.out.println("No such project id : " +id);
-        }    
+            logger.error("No such project id : " +id);
+        } 
+        logger.debug("Exiting deleteProject");
     }
 
     /**
@@ -139,6 +151,7 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public void displayOperation() throws DataBaseException, NumberFormatException {
+        logger.debug("Entering displayOperation");
         boolean repeatList = true;
         while (repeatList) {
             System.out.println("Select the choice [1-3]");
@@ -158,10 +171,11 @@ public class ProjectController {
                         repeatList = false;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Please Enter Number between [1-3]");
+                logger.error("Please Enter Number between [1-3]");
                 throw new NumberFormatException("issue while display the list choice ");
             }
         }
+        logger.debug("Exiting displayOperation");
     }
 
     /**
@@ -176,6 +190,7 @@ public class ProjectController {
      *     - When Exception occurs
      */
     public Project updateOperation(Project project) throws DataBaseException, NumberFormatException {
+        logger.debug("Entering updateOperation");
         boolean repeat = true;
         while (repeat) {
             System.out.println("1 ==> Update Project Name");
@@ -190,11 +205,12 @@ public class ProjectController {
                     default: System.out.println("Enter valid option");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Enter valid option");
+                logger.error("Enter valid option");
                 throw new NumberFormatException("issue while display the list choice ");
             }
             repeat = false;
         }
+        logger.debug("Exiting updateOperation");
         return project;
     }
 
@@ -235,7 +251,7 @@ public class ProjectController {
                 id = Integer.parseInt(scanner.nextLine());
                 repeat = false;
             } catch (NumberFormatException e) {
-                System.out.println("Please Enter Number");
+                logger.error("Please Enter Number");
                 repeat = false;
             }
         } while (repeat);
@@ -249,6 +265,7 @@ public class ProjectController {
      * </p>
      */
     public void displayChoice() {
+        logger.debug("Entering displayChoice");
         boolean repeat = true;
         while (repeat) {
             System.out.println("Select the choice [1-5]");
@@ -279,13 +296,14 @@ public class ProjectController {
                     default: System.out.println("Enter valid number");
                 }
             } catch (DataBaseException e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             }
         }
+        logger.debug("Exiting displayChoice");
     }
 
 }
