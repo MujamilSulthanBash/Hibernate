@@ -41,4 +41,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
         }
     }
 
+    @Override
+    public Department retrieveDepartmentById(int id) {
+        try (Session session = HibernateManage.getSessionFactory().openSession()) {
+            return session.get(Department.class, id); 
+        } catch (Exception e) {
+            throw new DataBaseException("Issue while retriev the Department " + id); 
+        }
+    }
+
 }
