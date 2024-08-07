@@ -41,4 +41,13 @@ public class ProjectDaoImpl implements ProjectDao {
         }
     }
 
+    @Override
+    public Project retrieveProjectById(int id) {
+        try (Session session = HibernateManage.getSessionFactory().openSession()) {
+            return session.get(Project.class, id); 
+        } catch (Exception e) {
+            throw new DataBaseException("Issue while retriev the project " + id); 
+        }
+    }
+
 }

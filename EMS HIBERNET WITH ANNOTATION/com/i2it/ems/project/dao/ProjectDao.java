@@ -22,7 +22,7 @@ public interface ProjectDao {
      * @throws DataBaseException 
      *     - When Exception occurs
      */
-    public void saveOrUpdateProject(Project project) throws DataBaseException;
+    void saveOrUpdateProject(Project project) throws DataBaseException;
 
     /**
      * <p>
@@ -34,6 +34,19 @@ public interface ProjectDao {
      * @throws DataBaseException 
      *     - When Exception occurs
      */
-    public List<Project> retrieveProjects() throws DataBaseException;
+    List<Project> retrieveProjects() throws DataBaseException;
+
+    /**
+     * <p>
+     * Retrieve Project by id.
+     * </p>
+     *
+     * @return Project
+     *     - Project details 
+     * @throws DataBaseException 
+     *     - When Exception occurs
+     */
+    Project retrieveProjects() throws DataBaseException;
+
 
 }

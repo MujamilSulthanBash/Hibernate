@@ -37,4 +37,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
     }
 
+    @Override
+    public Employee retrieveEmployeeById(int id) {
+        try (Session session = HibernateManage.getSessionFactory().openSession()) {
+            return session.get(Employee.class, id); 
+        } catch (Exception e) {
+            throw new DataBaseException("Issue while retriev the employee " + id); 
+        }
+    }
+
 }
